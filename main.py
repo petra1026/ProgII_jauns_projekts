@@ -60,7 +60,9 @@ def skolotaji():
 
 @app.route("/atzimes")
 def atzimes():
-    return render_template("atzimes.html")
+    atzimju_dati = iegut_atzimes()
+    videjas_atzimes = iegut_videjas_atzimes()
+    return render_template("atzimes.html", atzimes=atzimju_dati, videjas=videjas_atzimes)
 
 
 

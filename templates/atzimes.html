@@ -1,7 +1,26 @@
-{% extends "index.html"%}
+<!DOCTYPE html>
+{% extends "layout.html" %}
 
-{%block saturs%}
+{% block saturs %}
+<h1>Skolēnu atzīmes</h1>
+<table class="table">
+    <tr>
+        <th>Vārds</th>
+        <th>Uzvārds</th>
+        <th>Priekšmets</th>
+        <th>Atzīme</th>
+    </tr>
+    {% for atzime in atzimes %}
+    <tr>
+        <td>{{ atzime[0] }}</td>
+        <td>{{ atzime[1] }}</td>
+        <td>{{ atzime[2] }}</td>
+        <td>{{ atzime[3] }}</td>
+    </tr>
+    {% endfor %}
+</table>
 
+<h1>Vidējās atzīmes</h1>
 <table class="table">
     <tr>
         <th>Vārds</th>
@@ -9,7 +28,13 @@
         <th>Priekšmets</th>
         <th>Vidējā atzīme</th>
     </tr>
+    {% for videja in videjas %}
+    <tr>
+        <td>{{ videja[0] }}</td>
+        <td>{{ videja[1] }}</td>
+        <td>{{ videja[2] }}</td>
+        <td>{{ videja[3]|round(2) }}</td>
+    </tr>
+    {% endfor %}
 </table>
-
-
-{%endblock%}
+{% endblock %}

@@ -151,17 +151,17 @@ def pievienot_atzimi(atzime, skolens, prieksmets):
     conn.commit()
 
 def iegut_atzimes():
-    cur = conn.cursor()
-    cur.execute(
-        """SELECT vards, uzvards, nosaukums, atzime 
-        FROM 
-        (atzimes JOIN skoleni ON skoleni.id = atzimes.skolena_id)
-        JOIN prieksmeti ON prieksmeti.id = atzimes.prieksmeta_id
-        """
-    )
-    conn.commit()
-    dati = cur.fetchall()
-    return dati
+    db = sqlite3.connect("skola.db")
+    cursor = db.cursor()
+    cursor.execute("""
+        SELECT skoleni.vards, skoleni.uzvards, prieksmeti.nosaukums, atzimes.atzime 
+        FROM atzimes
+        JOIN skoleni ON atzimes.skolens_id = skoleni.id
+        JOIN prieksmeti ON atzimes.prieksmets_id = prieksmeti.id
+    """)
+    atzimes = cursor.fetchall()
+    db.close()
+    return atzimes
 
 def pievienot_skolotaju_prieksmetam(skolotajs, prieksmets):
     cur = conn.cursor()
@@ -186,15 +186,15 @@ def iegut_skolotaju_prieksmetus():
     return dati
 
 def iegut_videjas_atzimes():
-    cur = conn.cursor()
-    cur.execute(
-        """SELECT skoleni.vards, skoleni.uzvards, prieksmeti.nosaukums, AVG(atzimes.atzime), skoleni.id  
-        FROM (skoleni LEFT JOIN atzimes ON skoleni.id = atzimes.skolena_id) 
-            LEFT JOIN prieksmeti ON prieksmeti.id = atzimes.prieksmeta_id
+    db = sqlite3.connect("skola.db")
+    cursor = db.cursor()
+    cursor.execute("""
+        SELECT skoleni.vards, skoleni.uzvards, prieksmeti.nosaukums, AVG(atzimes.atzime) as videja_atzime
+        FROM atzimes
+        JOIN skoleni ON atzimes.skolens_id = skoleni.id
+        JOIN prieksmeti ON atzimes.prieksmets_id = prieksmeti.id
         GROUP BY skoleni.id, prieksmeti.id
-        ORDER BY skoleni.uzvards ASC
-        """
-    )
-    conn.commit()
-    dati = cur.fetchall()
-    return dati
+    """)
+    videjas = cursor.fetchall()
+    db.close()
+    return videjas
